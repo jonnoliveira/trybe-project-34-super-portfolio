@@ -33,3 +33,35 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CertifyingInstitution(models.Model):
+    name = models.CharField(max_length=100, validators=[count_char])
+    url = models.URLField(validators=[count_char])
+
+    def __str__(self):
+        return self.name
+
+
+class Certificate(models.Model):
+    name = models.CharField(
+        max_length=100, validators=[count_char], null=False
+    )
+    certifying_institution = models.ForeignKey(
+        CertifyingInstitution,
+        on_delete=models.CASCADE,
+        related_name="certificates",
+        default=2,
+        null=False,
+    )
+    timestamp = models.DateTimeField(
+        validators=[count_char], auto_now_add=True
+    )
+    profiles = models.ManyToManyField(
+        Profile,
+        related_name="certificates",
+        default=2,
+    )
+
+    def __str__(self):
+        return self.name
